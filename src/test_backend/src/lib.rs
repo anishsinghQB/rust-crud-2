@@ -1,5 +1,5 @@
 use ic_cdk::{query, update};
-use stable_impl::{get_msg,get_admin_data,UserArg,Error,AdminArg,AdminActuallArg, ActualUserArg,ADMIN_STORAGE,ID_COUNTER,ADMIN_ID,STORAGE};
+use stable_impl::{get_msg,get_admin_data,UserArg,Error,AdminArg,AdminActuallArg, ActualUserArg,add_post,ID_COUNTER,ADMIN_ID,STORAGE, add_admin_data};
 mod stable_impl;
 
 #[query]
@@ -18,16 +18,6 @@ fn get_admin_arg(id: u64)->Result<AdminArg, Error>{
         None => Err(Error::NotFound { msg: format!("admin data not found with {} id",id) }),
     }
 }
-
-fn add_post(user_data: &UserArg) {
-    STORAGE.with(|data| 
-    data.borrow_mut().insert(user_data.id, user_data.clone()));
-}
-
- fn add_admin_data(admin_arg : &AdminArg){
-    ADMIN_STORAGE.with(|admin_data| 
-    admin_data.borrow_mut().insert(admin_arg.admin_id, admin_arg.clone()));
- }
 
 #[update]
 fn post_admin_data(admin_arg: AdminActuallArg) -> Option<AdminArg> {

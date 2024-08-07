@@ -100,3 +100,14 @@ pub fn get_msg(id: &u64) -> Option<UserArg> {
 pub fn get_admin_data(id: &u64)-> Option<AdminArg>{
     ADMIN_STORAGE.with(|admin_data| admin_data.borrow().get(&id))
 }
+
+
+pub fn add_post(user_data: &UserArg) {
+    STORAGE.with(|data| 
+    data.borrow_mut().insert(user_data.id, user_data.clone()));
+}
+
+pub fn add_admin_data(admin_arg : &AdminArg){
+    ADMIN_STORAGE.with(|admin_data| 
+    admin_data.borrow_mut().insert(admin_arg.admin_id, admin_arg.clone()));
+ }

@@ -3,8 +3,15 @@ type ActualUserArg = record {
   post_title : text;
   post_description : text;
 };
+type AdminActuallArg = record { admin_name : text; admin_access : text };
+type AdminArg = record {
+  admin_id : nat64;
+  admin_name : text;
+  admin_access : text;
+};
 type Error = variant { NotFound : record { msg : text } };
 type Result = variant { Ok : UserArg; Err : Error };
+type Result_1 = variant { Ok : AdminArg; Err : Error };
 type UserArg = record {
   id : nat64;
   user_name : text;
@@ -13,7 +20,9 @@ type UserArg = record {
 };
 service : {
   delete_user_post : (nat64) -> (Result);
+  get_admin_arg : (nat64) -> (Result_1) query;
   get_message : (nat64) -> (Result) query;
+  post_admin_data : (AdminActuallArg) -> (opt AdminArg);
   update_post_details : (UserArg) -> (Result);
   upload_post : (ActualUserArg) -> (opt UserArg);
 }

@@ -1,3 +1,19 @@
+type ActualUserArg = record {
+  user_name : text;
+  post_title : text;
+  post_description : text;
+};
+type Error = variant { NotFound : record { msg : text } };
+type Result = variant { Ok : UserArg; Err : Error };
+type UserArg = record {
+  id : nat64;
+  user_name : text;
+  post_title : text;
+  post_description : text;
+};
 service : {
-    "greet": (text) -> (text) query;
+  delete_user_post : (nat64) -> (Result);
+  get_message : (nat64) -> (Result) query;
+  update_post_details : (UserArg) -> (Result);
+  upload_post : (ActualUserArg) -> (opt UserArg);
 }

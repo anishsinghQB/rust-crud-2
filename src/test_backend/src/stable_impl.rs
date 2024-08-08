@@ -8,6 +8,8 @@ use candid::{CandidType, Decode, Encode};
 pub type Memory = VirtualMemory<DefaultMemoryImpl>;
 pub type IdCell = Cell<u64, Memory>;
 pub type AdminIdCell = Cell<u64, Memory>;
+use candid::Principal;
+use ic_cdk::caller;
 
 #[derive(CandidType, Serialize, Deserialize, Clone)]
 pub struct UserArg {
@@ -110,4 +112,14 @@ pub fn add_post(user_data: &UserArg) {
 pub fn add_admin_data(admin_arg : &AdminArg){
     ADMIN_STORAGE.with(|admin_data| 
     admin_data.borrow_mut().insert(admin_arg.admin_id, admin_arg.clone()));
+ }
+
+ pub fn is_anonymous()->Result<(), String>{
+    let caller: Principal = caller();
+    if  caller == Principal::anonymous(){
+        Err("Acces denied for Anonymous user".to_string())
+    }
+    else {
+        Ok(())
+    }
  }

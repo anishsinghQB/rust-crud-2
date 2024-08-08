@@ -1,8 +1,8 @@
 use ic_cdk::{query, update};
-use stable_impl::{get_msg,get_admin_data,UserArg,Error,AdminArg,AdminActuallArg, ActualUserArg,add_post,ID_COUNTER,ADMIN_ID,STORAGE, add_admin_data,ADMIN_STORAGE};
+use stable_impl::{get_msg,get_admin_data,UserArg,Error,AdminArg,AdminActuallArg, ActualUserArg,add_post,ID_COUNTER,ADMIN_ID,STORAGE, add_admin_data,ADMIN_STORAGE,is_anonymous};
 mod stable_impl;
 
-#[query]
+#[query(guard = "is_anonymous")]
 fn get_message(id: u64) -> Result<UserArg, Error> {
     match get_msg(&id) {
         Some(message) => Ok(message),
@@ -19,7 +19,7 @@ fn get_admin_arg(id: u64)->Result<AdminArg, Error>{
     }
 }
 
-#[update]
+#[update(guard = "is_anonymous")]
 fn post_admin_data(admin_arg: AdminActuallArg) -> Option<AdminArg> {
     let admins_id = ADMIN_ID.with(|admin_data| {
         let admin_id = *admin_data.borrow().get();

@@ -1,5 +1,5 @@
 use ic_cdk::{query, update};
-use stable_impl::{get_msg,get_admin_data,UserArg,Error,AdminArg,AdminActuallArg, ActualUserArg,add_post,ID_COUNTER,ADMIN_ID,STORAGE, add_admin_data};
+use stable_impl::{get_msg,get_admin_data,UserArg,Error,AdminArg,AdminActuallArg, ActualUserArg,add_post,ID_COUNTER,ADMIN_ID,STORAGE, add_admin_data,ADMIN_STORAGE};
 mod stable_impl;
 
 #[query]
@@ -72,12 +72,36 @@ fn update_post_details(payload: UserArg) -> Result<UserArg, Error> {
 }
 
 #[update]
+fn update_admin_post_details(payload: AdminArg)-> Result<AdminArg, Error>{
+    match ADMIN_STORAGE.with(|admin_data| admin_data.borrow().get(&payload.admin_id)) {
+        Some(mut admin_post)=>{
+            admin_post.admin_access = payload.admin_access;
+            admin_post.admin_name = payload.admin_name;
+            add_admin_data(&admin_post);
+            Ok(admin_post)
+        }
+        None => Err(Error::NotFound { msg: format!(" can not update admin post with {} id  ", payload.admin_id) })
+    }
+}
+
+
+
+#[update]
 fn delete_user_post(id: u64) -> Result<UserArg, Error> {
     match STORAGE.with(|data| data.borrow_mut().remove(&id)) {
         Some(message) => Ok(message),
         None => Err(Error::NotFound {
             msg: format!("can not delete post with {} id", id),
         }),
+    }
+}
+
+#[update]
+fn delete_admin_data(id : u64)-> Result<AdminArg, Error>{
+    match ADMIN_STORAGE.with(|data| data.borrow_mut().remove(&id)) {
+        Some(msg)=> Ok(msg),
+        None => Err(Error::NotFound { msg: format!(" can not delete admin data with {} id ", id),
+     })
     }
 }
 

@@ -4,9 +4,9 @@
       "type": "custom",
       "candid": "https://raw.githubusercontent.com/dfinity/ic/d87954601e4b22972899e9957e800406a0a6b929/rs/rosetta-api/icp_ledger/index/index.did",
       "wasm": "https://download.dfinity.systems/ic/d87954601e4b22972899e9957e800406a0a6b929/canisters/ic-icp-index-canister.wasm.gz",
-            "remote": {
+      "remote": {
         "id": {
-          "ic": "qhbym-qaaaa-aaaaa-aaafq-cai"
+          "ic": "bkyz2-fmaaa-aaaaa-qaaaq-cai"
         }
       }
     },
